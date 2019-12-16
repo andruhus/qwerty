@@ -1,9 +1,8 @@
-#include <stdio.h>
 #include <iostream>
-#include <stdlib.h>
-#include <string>
 #include <conio.h>
+#define Is_Name_Corr  Is_Surname_Corr 
 #pragma warning(disable:4996)
+
 using namespace std;
 
 class Kont
@@ -14,26 +13,24 @@ private:
 	char nom[13] = { '+','3','8','0' };
 	char city[64];
 	char job[64];
-	struct birthdate { char year[4]; char month[2]; char day[2]; } date;
-	bool Is_Surname_Corr(char surname[64]);
-	bool Is_Name_Corr(char name[64]);
-	bool Is_Num_Corr(char surname[9]);
-	bool Is_City_Corr(char surname[64]);
-	bool Is_Job_Corr(char surname[64]);
-	bool Is_Birth_Corr(char year[4], char month[2], char day[2]);
+	struct { unsigned int year = 0, month = 0, day = 0; } date;
+	int strlength(char* str);
+	bool Is_Surname_Corr(char* name);
+	bool Is_Num_Corr(char* mobilePhone);
+	bool Is_City_Corr(char* name);
+	bool Is_Birth_Corr(int a, int b, int curDate);
 public:
-	
-	void SetKont(char surnam[64],char nam[64],char num[9],char town[64],char occ[64],char year1[4],char month1[2],char day1[2])
+
+	void SetKont(char surnam[64], char nam[64], char num[9], char town[64], char occ[64], int year1, int month1, int day1)
 	{
 		// surname
 		if (Is_Surname_Corr(surnam))
 		{
-			for(int i = 0;i<64;i++)
+			for (int i = 0; i < 64; i++)
 				surname[i] = surnam[i];
 		}
 		else
 			cout << "The surname is incorrect" << endl;
-
 
 		// name
 		if (Is_Name_Corr(nam))
@@ -44,14 +41,12 @@ public:
 		else
 			cout << "The name is incorrect" << endl;
 
-
 		// phone number
 		if (Is_Num_Corr(num))
 			for (int i = 0; i < 9; i++)
 				nom[i + 4] = num[i];
 		else
 			cout << "The number is incorrect" << endl;
-
 
 		// city
 		if (Is_City_Corr(town))
@@ -62,26 +57,12 @@ public:
 		else
 			cout << "The city is incorrect" << endl;
 
-
-		// occupation
-		if (Is_Job_Corr(occ))
-		{
-			for (int i = 0; i < 64; i++)
-				job[i] = occ[i];
-		}
-		else
-			cout << "The occupation is incorrect" << endl;
-
-
 		// Birthdate
-		if (Is_Birth_Corr(year1,month1,day1))
+		if (Is_Birth_Corr(year1, month1, day1))
 		{
-			for (int i = 0; i < 4; i++)
-				date.year[i] = year1[i];
-			for (int i = 0; i < 2; i++)
-				date.month[i] = month1[i];
-			for (int i = 0; i < 2; i++)
-				date.day[i] = day1[i];
+			date.year = year1;
+			date.month = month1;
+			date.day = day1;
 		}
 		else
 			cout << "The birthdate is incorrect" << endl;
@@ -93,15 +74,12 @@ public:
 		// writing a surname
 		for (char qw : surname)
 		{
-			fwrite(&qw,sizeof(char), 1, a);
+			fwrite(&qw, sizeof(char), 1, a);
 		}
-
-
 
 		// separate surname and name
 		char uy = ' ';
 		fwrite(&uy, sizeof(char), 1, a);
-
 
 		// writing a name
 		for (char qw : name)
@@ -110,20 +88,15 @@ public:
 		}
 		fwrite(&uy, sizeof(char), 1, a);
 
-
-
 		// separate name and mobile phone
 		uy = ' ';
 		fwrite(&uy, sizeof(char), 1, a);
-
 
 		// writing mobile phone
 		for (int i = 0; i < 13; i++)
 		{
 			fwrite(&nom[i], sizeof(char), 1, a);
 		}
-
-
 
 		// separate mobile phone and city
 		uy = ' ';
@@ -134,48 +107,56 @@ public:
 		for (char qw : city)
 			fwrite(&qw, sizeof(char), 1, a);
 
-
-
 		// separate city and occupation
 		uy = ' ';
 		fwrite(&uy, sizeof(char), 1, a);
-
 
 		// writing occupation
 		for (char qw : job)
 			fwrite(&qw, sizeof(char), 1, a);
 
-
-
 		// separate occupation and birthdate
 		uy = ' ';
 		fwrite(&uy, sizeof(char), 1, a);
 
-		
 		// writing birthdate
-			// year
-		for (char qw : date.year)
+		// year
+		char temp[4] = { "" };
+		for (int i = 0; i < 4; i++)
+		{
+			temp[i] = (char)(48 + date.year / pow(10, 3 - i));
+		}
+		for (char qw : temp)
+			fwrite(&qw, sizeof(int), 1, a);
+
+		uy = ' ';
+		fwrite(&uy, sizeof(char), 1, a);
+
+		// month
+		char temp2[4] = { "" };
+		for (int i = 0; i < 2; i++)
+		{
+			temp2[i] = (char)(48 + date.month / pow(10, 3 - i));
+		}
+		for (char qw : temp2)
 			fwrite(&qw, sizeof(char), 1, a);
 
 		uy = ' ';
 		fwrite(&uy, sizeof(char), 1, a);
 
-			// month
-		for (char qw : date.month)
-			fwrite(&qw, sizeof(char), 1, a);
-
-		uy = ' ';
-		fwrite(&uy, sizeof(char), 1, a);
-
-			// day
-		for (char qw : date.day)
+		// day
+		char temp3[4] = { "" };
+		for (int i = 0; i < 2; i++)
+		{
+			temp3[i] = (char)(48 + date.day / pow(10, 3 - i));
+		}
+		for (char qw : temp3)
 			fwrite(&qw, sizeof(char), 1, a);
 
 		// finish writing a contact
 		uy = '\n';
 		fwrite(&uy, sizeof(char), 1, a);
-		
-		
+
 		fclose(a);
 	}
 
@@ -183,52 +164,47 @@ public:
 	{
 		cout << "Surname: ";
 		for (char qw : surname)
-			if(qw > 0)
+			if (qw > 0)
 				cout << qw;
 		cout << endl;
 
 		cout << "Name: ";
 		for (char qw : name)
 			if (qw > 0)
-			cout << qw;
+				cout << qw;
 		cout << endl;
 
 		cout << "Mobile phone: ";
 		for (char qw : nom)
 			if (qw > 0)
-			cout << qw;
+				cout << qw;
 		cout << endl;
 
 		cout << "Native city: ";
 		for (char qw : city)
 			if (qw > 0)
-			cout << qw;
+				cout << qw;
 		cout << endl;
 
 		cout << "Occupation: ";
 		for (char qw : job)
 			if (qw > 0)
-			cout << qw;
+				cout << qw;
 		cout << endl;
 
 		cout << "Birthday: ";
-		for (char qw : date.day)
-			cout << qw;
+			cout << date.day;
 		cout << ".";
-		for (char qw : date.month)
-			cout << qw;
+			cout <<  date.month;
 		cout << ".";
-		for (char qw : date.year)
-			cout << qw;
+			cout << date.year;
 		cout << endl;
-
-
 	}
 
 
 	void EditKont()
 	{
-		
+
 		cout << "What do you want to edit?" << endl;
 		cout << "1 - Surname" << endl << "2 - Name" << endl;
 		cout << "3 - Mobile phone" << endl << "4 - Native city" << endl << "5 - Occupation" << endl;
@@ -237,25 +213,16 @@ public:
 		cin >> r;
 		switch (r)
 		{
-		case '1': cout << "Enter new surname: "; ChangeSurname(); break;
-		case '2': cout << "Enter new surname: "; ChangeSurname(); break;
-		case '3': cout << "Enter new surname: "; ChangeSurname(); break;
-		case '4': cout << "Enter new surname: "; ChangeSurname(); break;
-		case '5': cout << "Enter new surname: "; ChangeSurname(); break;
-		case '6': cout << "Enter new surname: "; ChangeSurname(); break;
+		case '1': cout << "Enter new surname: "; //ChangeSurname(); break;
+		case '2': cout << "Enter new surname: "; //ChangeSurname(); break;
+		case '3': cout << "Enter new surname: "; //ChangeSurname(); break;
+		case '4': cout << "Enter new surname: "; //ChangeSurname(); break;
+		case '5': cout << "Enter new surname: "; //ChangeSurname(); break;
+		case '6': cout << "Enter new surname: "; //ChangeSurname(); break;
 		default:
-			cout << "There is no such a commad break;
+			cout << "There is no such a commad break";
 		}
-		/*cout << "Enter a surname: ";
-		cin >> s1;
-		cout << "Enter a name: ";
-		cin >> s2;
-		cout << "Enter the number: +380";
-		cin >> p;
-		SetKont(s1, s2, p);*/
 	}
-
-	
 
 };
 
@@ -269,7 +236,7 @@ void ContDisplay(FILE* a)
 		cout << noi << ')' << ' ';
 		while ((ch = getc(a)) != EOF)
 		{
-			
+
 			if ((int)v == 10)
 			{
 				noi++;
@@ -284,16 +251,11 @@ void ContDisplay(FILE* a)
 
 void AddCont(FILE* a)
 {
-	
-	
-	char surname[64];
-	char name[64];
-	char nom[9];
-	char city[64];
-	char job[64];
-	char year[4];
-	char month[2];
-	char day[2];
+
+
+	char surname[64], name[64], nom[13], city[64], job[64];
+	int year, month, day;
+
 	cout << "Enter a surname: ";
 	cin.getline(surname, 64);
 	cout << "Enter a name: ";
@@ -306,60 +268,75 @@ void AddCont(FILE* a)
 	cin.getline(job, 64);
 	cout << "Enter your birthdate:" << endl;
 	cout << "Year: ";
-	cin.getline(year, 4);
+	cin >> year;
+	while (cin.fail())
+	{
+		cout << "Incorrect Input!" << endl;
+		cin.clear();
+		cin.ignore(32767, '\n');
+		cin >> year;
+	}
 	cout << "Month: ";
-	cin.getline(month, 2);
+	cin >> month;
+	while (cin.fail())
+	{
+		cout << "Incorrect Input!" << endl;
+		cin.clear();
+		cin.ignore(32767, '\n');
+		cin >> month;
+	}
 	cout << "Day: ";
-	cin.getline(day, 2);
-	
+	cin >> day;
+	while (cin.fail())
+	{
+		cout << "Incorrect Input!" << endl;
+		cin.clear();
+		cin.ignore(32767, '\n');
+		cin >> day;
+	}
+
 	Kont ret;
 	ret.SetKont(surname, name, nom, city, job, year, month, day);
 	ret.Write(a);
-	
+
 	system("cls");
 	cout << "The contact was successfully added" << endl;
 	ret.Display();
 	system("pause");
 	system("cls");
-	
+
 }
 
 
 
 void EditCont(FILE* a)
 {
-	
+
 	a = fopen("Abonent.txt", "rb");
 	int i = 0;
 	int nKont = 0;
 	int ch;
 	// here we count how many contacts the file has
-	while ((ch= getc(a)) != EOF)
+	while ((ch = getc(a)) != EOF)
 	{
-		if(ch == 10)
-		nKont++;
+		if (ch == 10)
+			nKont++;
 	}
 	Kont* mas = new Kont[nKont];
 
 	// here we form the 'Kont* mas'
-	int o = 0;
-	char surname[64];
-	char name[64];
-	char nom[13];
-	char city[64];
-	char job[64];
-	char year[4]; 
-	char month[2]; 
-	char day[2];
+	int Regulator = 0;
+	char surname[64], name[64], nom[13], city[64], job[64];
+	int year, month, day;
 	fseek(a, 0, SEEK_SET);
 	int j = 0;
 	while ((ch = getc(a)) != EOF)
 	{
-		
+
 		if (ch == 10)
 		{
-			o++;
-			o = o % 8;
+			Regulator++;
+			Regulator = Regulator % 8;
 			mas[i].SetKont(surname, name, nom, city, job, year, month, day);
 			i++;
 			j = 0;
@@ -367,53 +344,53 @@ void EditCont(FILE* a)
 		}
 		if (ch == 32)
 		{
-			o++;
+			Regulator++;
 			j = 0;
 			continue;
 		}
 
-		if (o == 0)
+		if (Regulator == 0)
 		{
 			surname[j] = (char)ch;
 			j++;
 		}
-		else if (o == 1)
+		else if (Regulator == 1)
 		{
 			name[j] = (char)ch;
 			j++;
 		}
-		else if (o == 2)
+		else if (Regulator == 2)
 		{
 			nom[j] = (char)ch;
 			j++;
 		}
-		else if (o == 3)
+		else if (Regulator == 3)
 		{
 			city[j] = (char)ch;
 			j++;
 		}
-		else if (o == 4)
+		else if (Regulator == 4)
 		{
 			job[j] = (char)ch;
 			j++;
 		}
-		else if (o == 5)
+		else if (Regulator == 5)
 		{
-			year[j] = (char)ch;
+			year = ch - '0';
 			j++;
 		}
-		else if (o == 6)
+		else if (Regulator == 6)
 		{
-			month[j] = (char)ch;
+			month = ch - '0';
 			j++;
 		}
 		else
 		{
-			day[j] = (char)ch;
+			day = ch - '0';
 			j++;
 		}
 	}
-	
+
 	// now the user chooses a contact which he wants to change
 	for (int g = 0; g < nKont; g++)
 	{
@@ -441,21 +418,21 @@ void EditCont(FILE* a)
 
 	mas[i].EditKont();
 	system("cls");
+
 	cout << "The contact was successfully edited" << endl;
 	system("pause");
 	system("cls");
+
 	fclose(a);
 
 	a = fopen("Abonent.txt", "w");
-	
 
 	for (int j = 0; j < nKont; j++)
 	{
 		mas[j].Write(a);
 	}
+
 	fclose(a);
-
-
 }
 
 void DelCont(FILE* a)
@@ -473,15 +450,9 @@ void DelCont(FILE* a)
 	Kont* mas = new Kont[nKont];
 
 	// here we form the 'Kont* mas'
-	int o = 0;
-	char surname[64];
-	char name[64];
-	char nom[13];
-	char city[64];
-	char job[64];
-	char year[4];
-	char month[2];
-	char day[2];
+	int Regulator = 0;
+	char surname[64], name[64], nom[13], city[64], job[64];
+	int year, month, day;
 	fseek(a, 0, SEEK_SET);
 	int j = 0;
 	while ((ch = getc(a)) != EOF)
@@ -489,8 +460,8 @@ void DelCont(FILE* a)
 
 		if (ch == 10)
 		{
-			o++;
-			o = o % 8;
+			Regulator++;
+			Regulator = Regulator % 8;
 			mas[i].SetKont(surname, name, nom, city, job, year, month, day);
 			i++;
 			j = 0;
@@ -498,49 +469,49 @@ void DelCont(FILE* a)
 		}
 		if (ch == 32)
 		{
-			o++;
+			Regulator++;
 			j = 0;
 			continue;
 		}
 
-		if (o == 0)
+		if (Regulator == 0)
 		{
 			surname[j] = (char)ch;
 			j++;
 		}
-		else if (o == 1)
+		else if (Regulator == 1)
 		{
 			name[j] = (char)ch;
 			j++;
 		}
-		else if (o == 2)
+		else if (Regulator == 2)
 		{
 			nom[j] = (char)ch;
 			j++;
 		}
-		else if (o == 3)
+		else if (Regulator == 3)
 		{
 			city[j] = (char)ch;
 			j++;
 		}
-		else if (o == 4)
+		else if (Regulator == 4)
 		{
 			job[j] = (char)ch;
 			j++;
 		}
-		else if (o == 5)
+		else if (Regulator == 5)
 		{
-			year[j] = (char)ch;
+			year = ch - '0';
 			j++;
 		}
-		else if (o == 6)
+		else if (Regulator == 6)
 		{
-			month[j] = (char)ch;
+			month = ch - '0';
 			j++;
 		}
 		else
 		{
-			day[j] = (char)ch;
+			day = ch - '0';
 			j++;
 		}
 	}
@@ -575,12 +546,12 @@ void DelCont(FILE* a)
 	system("cls");
 
 	a = fopen("Abonent.txt", "w");
-	
+
 
 	for (int j = 0; j < nKont; j++)
 	{
-		if(j != i)
-		mas[j].Write(a);
+		if (j != i)
+			mas[j].Write(a);
 	}
 	fclose(a);
 	return;
@@ -633,14 +604,66 @@ void MENU(FILE* a)
 		MENU(a);
 }
 
-
-
 void Kontacts()
 {
 	FILE* f;
 	f = nullptr;
-	// f = fopen("newProga.cpp");
-	//fwrite()
-	//f = fopen("Abonent.txt");
 	MENU(f);
+}
+
+bool Kont::Is_Surname_Corr(char* name)
+{
+	if (strlength(name) == 0) return false;
+	for (int i = 0; i < strlength(name); i++)
+		if (!isalpha(name[i]))
+		{
+			cout << "Incorrect Name Input!" << endl;
+			return false;
+		}
+	return true;
+}
+
+bool Kont::Is_Num_Corr(char* mobilePhone)
+{
+	if (strlength(mobilePhone) == 0) return false;
+	for (int i = 0; i < strlength(mobilePhone); i++) if (!isdigit(mobilePhone[i]) && mobilePhone[i] != '+')
+	{
+		cout << "Incorrect Phone Input!" << endl;
+		return false;
+	}
+	return true;
+}
+
+bool Kont::Is_City_Corr(char* name)
+{
+	if (strlength(name) == 0) return false;
+	for (int i = 0; i < strlength(name); i++)
+		if (!isalpha(name[i]))
+		{
+			cout << "Incorrect Town Input!" << endl;
+			return false;
+		}
+	return true;
+}
+
+bool Kont::Is_Birth_Corr(int a, int b, int curDate)
+{
+	if (curDate == 0 || curDate < a || curDate > b)
+	{
+		cout << "Verify day, month and year!" << endl;
+		if (cin.fail()) {
+			cout << "Incorrect Date Input!" << endl;
+			cin.clear(); cin.ignore(32767, '\n');
+		}
+		return false;
+	}
+	return true;
+}
+
+
+int Kont::strlength(char* str)
+{
+	int i = 0;
+	while (str[i] != '\0') i++;
+	return i;
 }
