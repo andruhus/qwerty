@@ -1,3 +1,0 @@
-﻿  cwayfiles.cpp
-C:\Users\aaade\Desktop\programs\C++\experementics\cwayfiles.cpp(237,1): error C2660:  'Kont::SetKont': function does not take 3 arguments
-C:\Users\aaade\Desktop\programs\C++\experementics\cwayfiles.cpp(25,7): message :  see declaration of 'Kont::SetKont'
