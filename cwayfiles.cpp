@@ -15,14 +15,15 @@ private:
 	char city[64];
 	char job[64];
 	struct birthdate { char year[4]; char month[2]; char day[2]; } date;
-public:
 	bool Is_Surname_Corr(char surname[64]);
 	bool Is_Name_Corr(char name[64]);
 	bool Is_Num_Corr(char surname[9]);
 	bool Is_City_Corr(char surname[64]);
 	bool Is_Job_Corr(char surname[64]);
-	bool Is_Birth_Corr(birthdate date);
-	void SetKont(char surnam[64],char nam[64],char num[9],char town[64],char occ[64],birthdate dat)
+	bool Is_Birth_Corr(char year[4], char month[2], char day[2]);
+public:
+	
+	void SetKont(char surnam[64],char nam[64],char num[9],char town[64],char occ[64],char year1[4],char month1[2],char day1[2])
 	{
 		// surname
 		if (Is_Surname_Corr(surnam))
@@ -73,14 +74,14 @@ public:
 
 
 		// Birthdate
-		if (Is_Birth_Corr(dat))
+		if (Is_Birth_Corr(year1,month1,day1))
 		{
 			for (int i = 0; i < 4; i++)
-				date.year[i] = dat.year[i];
+				date.year[i] = year1[i];
 			for (int i = 0; i < 2; i++)
-				date.month[i] = dat.month[i];
+				date.month[i] = month1[i];
 			for (int i = 0; i < 2; i++)
-				date.day[i] = dat.day[i];
+				date.day[i] = day1[i];
 		}
 		else
 			cout << "The birthdate is incorrect" << endl;
@@ -112,7 +113,7 @@ public:
 
 
 		// separate name and mobile phone
-		char uy = ' ';
+		uy = ' ';
 		fwrite(&uy, sizeof(char), 1, a);
 
 
@@ -125,7 +126,7 @@ public:
 
 
 		// separate mobile phone and city
-		char uy = ' ';
+		uy = ' ';
 		fwrite(&uy, sizeof(char), 1, a);
 
 
@@ -136,7 +137,7 @@ public:
 
 
 		// separate city and occupation
-		char uy = ' ';
+		uy = ' ';
 		fwrite(&uy, sizeof(char), 1, a);
 
 
@@ -147,7 +148,7 @@ public:
 
 
 		// separate occupation and birthdate
-		char uy = ' ';
+		uy = ' ';
 		fwrite(&uy, sizeof(char), 1, a);
 
 		
@@ -156,14 +157,14 @@ public:
 		for (char qw : date.year)
 			fwrite(&qw, sizeof(char), 1, a);
 
-		char uy = ' ';
+		uy = ' ';
 		fwrite(&uy, sizeof(char), 1, a);
 
 			// month
 		for (char qw : date.month)
 			fwrite(&qw, sizeof(char), 1, a);
 
-		char uy = ' ';
+		uy = ' ';
 		fwrite(&uy, sizeof(char), 1, a);
 
 			// day
@@ -182,26 +183,31 @@ public:
 	{
 		cout << "Surname: ";
 		for (char qw : surname)
-			cout << qw;
+			if(qw > 0)
+				cout << qw;
 		cout << endl;
 
 		cout << "Name: ";
 		for (char qw : name)
+			if (qw > 0)
 			cout << qw;
 		cout << endl;
 
 		cout << "Mobile phone: ";
 		for (char qw : nom)
+			if (qw > 0)
 			cout << qw;
 		cout << endl;
 
 		cout << "Native city: ";
 		for (char qw : city)
+			if (qw > 0)
 			cout << qw;
 		cout << endl;
 
 		cout << "Occupation: ";
 		for (char qw : job)
+			if (qw > 0)
 			cout << qw;
 		cout << endl;
 
@@ -222,14 +228,31 @@ public:
 
 	void EditKont()
 	{
-		string s1, s2, p;
-		cout << "Enter a surname: ";
+		
+		cout << "What do you want to edit?" << endl;
+		cout << "1 - Surname" << endl << "2 - Name" << endl;
+		cout << "3 - Mobile phone" << endl << "4 - Native city" << endl << "5 - Occupation" << endl;
+		cout << "6 - Birthdate";
+		char r;
+		cin >> r;
+		switch (r)
+		{
+		case '1': cout << "Enter new surname: "; ChangeSurname(); break;
+		case '2': cout << "Enter new surname: "; ChangeSurname(); break;
+		case '3': cout << "Enter new surname: "; ChangeSurname(); break;
+		case '4': cout << "Enter new surname: "; ChangeSurname(); break;
+		case '5': cout << "Enter new surname: "; ChangeSurname(); break;
+		case '6': cout << "Enter new surname: "; ChangeSurname(); break;
+		default:
+			cout << "There is no such a commad break;
+		}
+		/*cout << "Enter a surname: ";
 		cin >> s1;
 		cout << "Enter a name: ";
 		cin >> s2;
 		cout << "Enter the number: +380";
 		cin >> p;
-		SetKont(s1, s2, p);
+		SetKont(s1, s2, p);*/
 	}
 
 	
@@ -247,13 +270,13 @@ void ContDisplay(FILE* a)
 		while ((ch = getc(a)) != EOF)
 		{
 			
-			if ((int)v == 10 && ch > 64 && ch < 123)
+			if ((int)v == 10)
 			{
 				noi++;
 				cout << noi << ')' << ' ';
 
 			}
-			std::cout << (char)ch;
+			cout << ch;
 			v = ch;
 		}
 	}
@@ -263,16 +286,34 @@ void AddCont(FILE* a)
 {
 	
 	
-	string s1, s2,p;
+	char surname[64];
+	char name[64];
+	char nom[9];
+	char city[64];
+	char job[64];
+	char year[4];
+	char month[2];
+	char day[2];
 	cout << "Enter a surname: ";
-	cin >> s1;
+	cin.getline(surname, 64);
 	cout << "Enter a name: ";
-	cin >> s2;
+	cin.getline(name, 64);
 	cout << "Enter the number: +380";
-	cin >> p;
+	cin.getline(nom, 9);
+	cout << "Enter a native city: ";
+	cin.getline(city, 64);
+	cout << "Enter an occupation: ";
+	cin.getline(job, 64);
+	cout << "Enter your birthdate:" << endl;
+	cout << "Year: ";
+	cin.getline(year, 4);
+	cout << "Month: ";
+	cin.getline(month, 2);
+	cout << "Day: ";
+	cin.getline(day, 2);
 	
 	Kont ret;
-	ret.SetKont(s1, s2, p);
+	ret.SetKont(surname, name, nom, city, job, year, month, day);
 	ret.Write(a);
 	
 	system("cls");
@@ -292,6 +333,7 @@ void EditCont(FILE* a)
 	int i = 0;
 	int nKont = 0;
 	int ch;
+	// here we count how many contacts the file has
 	while ((ch= getc(a)) != EOF)
 	{
 		if(ch == 10)
@@ -299,37 +341,80 @@ void EditCont(FILE* a)
 	}
 	Kont* mas = new Kont[nKont];
 
+	// here we form the 'Kont* mas'
 	int o = 0;
-	string s1, s2, p;
+	char surname[64];
+	char name[64];
+	char nom[13];
+	char city[64];
+	char job[64];
+	char year[4]; 
+	char month[2]; 
+	char day[2];
 	fseek(a, 0, SEEK_SET);
+	int j = 0;
 	while ((ch = getc(a)) != EOF)
 	{
 		
 		if (ch == 10)
 		{
 			o++;
-			o = o % 3;
-			p.erase(0, 4);
-			mas[i].SetKont(s1, s2, p);
+			o = o % 8;
+			mas[i].SetKont(surname, name, nom, city, job, year, month, day);
 			i++;
-			s1 = ""; s2 = ""; p = "";
+			j = 0;
 			continue;
 		}
 		if (ch == 32)
 		{
 			o++;
-			o = o % 3;
+			j = 0;
 			continue;
 		}
 
 		if (o == 0)
-			s1 += (char)ch;
+		{
+			surname[j] = (char)ch;
+			j++;
+		}
 		else if (o == 1)
-			s2 += (char)ch;
+		{
+			name[j] = (char)ch;
+			j++;
+		}
+		else if (o == 2)
+		{
+			nom[j] = (char)ch;
+			j++;
+		}
+		else if (o == 3)
+		{
+			city[j] = (char)ch;
+			j++;
+		}
+		else if (o == 4)
+		{
+			job[j] = (char)ch;
+			j++;
+		}
+		else if (o == 5)
+		{
+			year[j] = (char)ch;
+			j++;
+		}
+		else if (o == 6)
+		{
+			month[j] = (char)ch;
+			j++;
+		}
 		else
-			p += (char)ch;
+		{
+			day[j] = (char)ch;
+			j++;
+		}
 	}
 	
+	// now the user chooses a contact which he wants to change
 	for (int g = 0; g < nKont; g++)
 	{
 		cout << "Do you want to change this account?" << endl;
@@ -362,13 +447,13 @@ void EditCont(FILE* a)
 	fclose(a);
 
 	a = fopen("Abonent.txt", "w");
-	fclose(a);
+	
 
 	for (int j = 0; j < nKont; j++)
 	{
 		mas[j].Write(a);
 	}
-	
+	fclose(a);
 
 
 }
@@ -379,6 +464,7 @@ void DelCont(FILE* a)
 	int i = 0;
 	int nKont = 0;
 	int ch;
+	// here we count how many contacts the file has
 	while ((ch = getc(a)) != EOF)
 	{
 		if (ch == 10)
@@ -386,37 +472,80 @@ void DelCont(FILE* a)
 	}
 	Kont* mas = new Kont[nKont];
 
+	// here we form the 'Kont* mas'
 	int o = 0;
-	string s1, s2, p;
+	char surname[64];
+	char name[64];
+	char nom[13];
+	char city[64];
+	char job[64];
+	char year[4];
+	char month[2];
+	char day[2];
 	fseek(a, 0, SEEK_SET);
+	int j = 0;
 	while ((ch = getc(a)) != EOF)
 	{
 
 		if (ch == 10)
 		{
 			o++;
-			o = o % 3;
-			p.erase(0, 4);
-			mas[i].SetKont(s1, s2, p);
+			o = o % 8;
+			mas[i].SetKont(surname, name, nom, city, job, year, month, day);
 			i++;
-			s1 = ""; s2 = ""; p = "";
+			j = 0;
 			continue;
 		}
 		if (ch == 32)
 		{
 			o++;
-			o = o % 3;
+			j = 0;
 			continue;
 		}
 
 		if (o == 0)
-			s1 += (char)ch;
+		{
+			surname[j] = (char)ch;
+			j++;
+		}
 		else if (o == 1)
-			s2 += (char)ch;
+		{
+			name[j] = (char)ch;
+			j++;
+		}
+		else if (o == 2)
+		{
+			nom[j] = (char)ch;
+			j++;
+		}
+		else if (o == 3)
+		{
+			city[j] = (char)ch;
+			j++;
+		}
+		else if (o == 4)
+		{
+			job[j] = (char)ch;
+			j++;
+		}
+		else if (o == 5)
+		{
+			year[j] = (char)ch;
+			j++;
+		}
+		else if (o == 6)
+		{
+			month[j] = (char)ch;
+			j++;
+		}
 		else
-			p += (char)ch;
+		{
+			day[j] = (char)ch;
+			j++;
+		}
 	}
 
+	// now the user chooses a contact which he wants to delete
 	for (int g = 0; g < nKont; g++)
 	{
 		cout << "Do you want to delete this account?" << endl;
@@ -446,14 +575,14 @@ void DelCont(FILE* a)
 	system("cls");
 
 	a = fopen("Abonent.txt", "w");
-	fclose(a);
+	
 
 	for (int j = 0; j < nKont; j++)
 	{
 		if(j != i)
 		mas[j].Write(a);
 	}
-
+	fclose(a);
 	return;
 }
 
