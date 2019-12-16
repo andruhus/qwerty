@@ -8,7 +8,7 @@ private:
 	char nom[13] = { '+','3','8','0' };
 	char city[64];
 	char job[64];
-	struct birthdate { char year[4]; char month[2]; char day[2]; } date;
+	struct { unsigned int year = 0, month = 0, day = 0; } date;
 	bool Is_Surname_Corr(char surname[64]);
 	bool Is_Name_Corr(char name[64]);
 	bool Is_Num_Corr(char surname[9]);

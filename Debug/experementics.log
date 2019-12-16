@@ -1,9 +1,0 @@
-﻿  cwayfiles.cpp
-  Functions for Kont.cpp
-  Generating Code...
-Functions for Kont.obj : error LNK2019: unresolved external symbol "private: bool __thiscall Kont::Is_Surname_Corr(char * const)" (?Is_Surname_Corr@Kont@@AAE_NQAD@Z) referenced in function "private: void __thiscall Kont::ChangeSurname(void)" (?ChangeSurname@Kont@@AAEXXZ)
-Functions for Kont.obj : error LNK2019: unresolved external symbol "private: bool __thiscall Kont::Is_Name_Corr(char * const)" (?Is_Name_Corr@Kont@@AAE_NQAD@Z) referenced in function "private: void __thiscall Kont::ChangeMob(void)" (?ChangeMob@Kont@@AAEXXZ)
-Functions for Kont.obj : error LNK2019: unresolved external symbol "private: bool __thiscall Kont::Is_Num_Corr(char * const)" (?Is_Num_Corr@Kont@@AAE_NQAD@Z) referenced in function "public: void __thiscall Kont::SetKont(char * const,char * const,char * const,char * const,char * const,char * const,char * const,char * const)" (?SetKont@Kont@@QAEXQAD0000000@Z)
-Functions for Kont.obj : error LNK2019: unresolved external symbol "private: bool __thiscall Kont::Is_City_Corr(char * const)" (?Is_City_Corr@Kont@@AAE_NQAD@Z) referenced in function "private: void __thiscall Kont::ChangeCity(void)" (?ChangeCity@Kont@@AAEXXZ)
-Functions for Kont.obj : error LNK2019: unresolved external symbol "private: bool __thiscall Kont::Is_Birth_Corr(char * const,char * const,char * const)" (?Is_Birth_Corr@Kont@@AAE_NQAD00@Z) referenced in function "public: void __thiscall Kont::SetKont(char * const,char * const,char * const,char * const,char * const,char * const,char * const,char * const)" (?SetKont@Kont@@QAEXQAD0000000@Z)
-C:\Users\aaade\Desktop\programs\C++\experementics\Debug\experementics.exe : fatal error LNK1120: 5 unresolved externals
